@@ -1,46 +1,35 @@
 package com.example.productapp_backend.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.productapp_backend.dao.ProductDao;
+import com.example.productapp_backend.model.Products;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class ProductController
 {
-    @PostMapping("/")
-    public String HomePage()
-    {
-        return "Welcome to Home Page";
-    }
+@Autowired
+private ProductDao dao;
 
-    @PostMapping("/add")
-    public String Add()
+    @PostMapping(path = "/add",consumes = "application/json",produces = "application/json")
+    public String AddProduct(@RequestBody Products p)
     {
+        System.out.println(p.getProductName().toString());
+        System.out.println(p.getProductcode());
+        dao.save(p);
         return "Add product";
     }
 
-    @PostMapping("/search")
-    public String Search()
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/viewall")
+    public List<Products> Viewall()
     {
-        return "Search product";
+        return (List<Products>) dao.findAll();
     }
 
-    @PostMapping("/edit")
-    public String Edit()
-    {
-        return "Edit product";
-    }
 
-    @GetMapping("/products")
-    public String Viewall()
-    {
-        return "View all products";
-    }
-
-    @PostMapping("/delete")
-    public String Delete()
-    {
-        return "Delete product";
-    }
 }
